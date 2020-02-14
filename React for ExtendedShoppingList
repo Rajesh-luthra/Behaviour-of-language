@@ -124,3 +124,109 @@ ReactDOM.render(
   <ShoppingList />,
   document.getElementById('shopping-list')
 );
+//this is babel code
+
+function _extends() {_extends = Object.assign || function (target) {for (var i = 1; i < arguments.length; i++) {if (window.CP.shouldStopExecution(0)) break;var source = arguments[i];for (var key in source) {if (Object.prototype.hasOwnProperty.call(source, key)) {target[key] = source[key];}}}window.CP.exitedLoop(0);return target;};return _extends.apply(this, arguments);}function ChecklistTable({ columns, rows, initialValues, ...otherProps }) {
+  const [checkboxValues, setCheckboxValues] = React.useState(initialValues);
+
+  function checkAllBoxes() {
+    setCheckboxValues(new Array(rows.length).fill(true));
+  }
+
+  function uncheckAllBoxes() {
+    setCheckboxValues(new Array(rows.length).fill(false));
+  }
+
+  function setCheckboxValue(rowIndex, checked) {
+    const newValues = checkboxValues.slice();
+    newValues[rowIndex] = checked;
+    setCheckboxValues(newValues);
+  }
+
+  const numItems = checkboxValues.length;
+  const numChecked = checkboxValues.filter(Boolean).length;
+
+  return (
+    React.createElement("table", _extends({ className: "pf-c-table pf-m-grid-lg", role: "grid" }, otherProps),
+    React.createElement("caption", null,
+    React.createElement("span", null, numChecked, " of ", numItems, " items checked"),
+    React.createElement("button", {
+      onClick: checkAllBoxes,
+      disabled: numChecked === numItems,
+      className: "pf-c-button pf-m-primary",
+      type: "button" }, "Check all"),
+
+
+
+    React.createElement("button", {
+      onClick: uncheckAllBoxes,
+      disabled: numChecked === 0,
+      className: "pf-c-button pf-m-secondary",
+      type: "button" }, "Uncheck all")),
+
+
+
+
+    React.createElement("thead", null,
+    React.createElement("tr", null,
+    React.createElement("td", null),
+    columns.map(function (column) {
+      return React.createElement("th", { scope: "col", key: column }, column);
+    }))),
+
+
+    React.createElement("tbody", null,
+    rows.map(function (row, rowIndex) {
+      const [firstCell, ...otherCells] = row;
+      const labelId = `item-${rowIndex}-${firstCell}`;
+      const isChecked = checkboxValues[rowIndex];
+      return (
+        React.createElement("tr", { key: firstCell, className: isChecked ? 'checked' : '' },
+        React.createElement("td", { className: "pf-c-table__check" },
+        React.createElement("input", {
+          type: "checkbox",
+          name: firstCell,
+          "aria-labelledby": labelId,
+          checked: isChecked,
+          onChange: function (event) {
+            setCheckboxValue(rowIndex, event.target.checked);
+          } })),
+
+
+        React.createElement("th", { "data-label": columns[0] },
+        React.createElement("div", { id: labelId }, firstCell)),
+
+        otherCells.map(function (cell, cellIndex) {
+          return (
+            React.createElement("td", { key: cell, "data-label": columns[1 + cellIndex] },
+            cell));
+
+
+        })));
+
+
+    }))));
+
+
+
+};
+
+function ShoppingList() {
+  return (
+    React.createElement(ChecklistTable, {
+      "aria-label": "Shopping list",
+      columns: ['Item', 'Quantity'],
+      rows: [
+      ['Sugar', '1 cup'],
+      ['Butter', '½ cup'],
+      ['Eggs', '2'],
+      ['Milk', '½ cup']],
+
+      initialValues: [false, false, true, false] }));
+
+
+}
+
+ReactDOM.render(
+React.createElement(ShoppingList, null),
+document.getElementById('shopping-list'));
